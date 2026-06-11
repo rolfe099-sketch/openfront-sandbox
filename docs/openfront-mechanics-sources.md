@@ -38,6 +38,16 @@ It must not imply exact OpenFront mechanics, hidden-state awareness, live-game a
 | Local clone committed? | No |
 | Git ignore verification | `.gitignore:4:.external/` |
 
+## Source-Aligned Model Foundation
+
+Phase 1D adds a small TypeScript foundation for source references and scenario snapshots. These are infrastructure pieces only. They do not implement mechanics, formulas, scoring, simulation, construction behavior, map loading, or OpenFront gameplay rules.
+
+| Foundation | OpenFront source path(s) | OpenFront Sandbox path(s) | Checked commit | Last checked | Implementation status | Source status | Exactness | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Source reference metadata | `src/core/game/Game.ts`; `src/core/game/GameMap.ts`; `src/core/execution/ConstructionExecution.ts` | `src/core/source/source-reference.ts`; `src/core/source/source-reference.test.ts` | `af2849a2d71a7700a72c077a9e5616e990e584f6` | 2026-06-11 | implemented as infrastructure | source-located | source-aligned model | Tracks repo URL, branch, commit hash, checked date, source path, confidence, and exactness for future source-derived work. |
+| Core aliases and coordinate vocabulary | `src/core/game/Game.ts`; `src/core/game/GameMap.ts` | `src/core/scenario/types.ts`; `src/core/scenario/types.test.ts` | `af2849a2d71a7700a72c077a9e5616e990e584f6` | 2026-06-11 | implemented as infrastructure | source-located | source-aligned model | Defines `PlayerID`, `Tick`, `Gold`, `TileRef`, and `MapPos` shapes without map behavior or gameplay rules. |
+| Unit type vocabulary and scenario snapshots | `src/core/game/Game.ts`; `src/core/execution/ConstructionExecution.ts` | `src/core/scenario/types.ts`; `src/core/scenario/types.test.ts` | `af2849a2d71a7700a72c077a9e5616e990e584f6` | 2026-06-11 | implemented as infrastructure | source-located | source-aligned model | Captures OpenFront unit type names and basic player/unit/map snapshot shapes only. Costs, ranges, build rules, construction behavior, and scoring remain not implemented. |
+
 ## Mechanics Register
 
 | Mechanic | OpenFront source path(s) | Checked commit | Last checked | Implementation status | Source status | Exactness | Notes |

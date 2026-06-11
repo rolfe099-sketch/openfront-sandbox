@@ -23,6 +23,12 @@ Current inspection baseline:
 - Git ignore verification: `.gitignore:4:.external/`
 - Clone status: present locally and untracked by OpenFront Sandbox
 
+## Phase 1D Source-Aligned Model Foundation
+
+OpenFront Sandbox now has a minimal TypeScript model foundation in `src/core/source/` and `src/core/scenario/`. This foundation is aligned to upstream names and shapes from `src/core/game/Game.ts`, `src/core/game/GameMap.ts`, and `src/core/execution/ConstructionExecution.ts` at the checked commit.
+
+This foundation does not implement OpenFront mechanics, formulas, scoring, simulation, map loading, construction behavior, unit costs, ranges, or UI behavior. It exists to make future source-derived mechanics easier to implement and cite.
+
 ## Source Areas
 
 | Area | Likely source path/file | Status | Notes | Safe to implement now? |

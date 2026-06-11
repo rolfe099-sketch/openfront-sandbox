@@ -28,6 +28,7 @@ Before making project updates, read this file first. After making meaningful cha
 - Added root `AGENTS.md` as the standing development contract for AI and coding assistants.
 - Updated the README contributor process to point coding assistants to `AGENTS.md` before making changes.
 - Added benchmark policy, support and coordination, simulation evaluation, and replay-review architecture boundaries for future offline coaching work.
+- Added Phase 1D source-reference helpers and source-aligned scenario model infrastructure for future source-derived mechanics.
 
 ### Notes
 
@@ -41,4 +42,5 @@ Before making project updates, read this file first. After making meaningful cha
 - Future source and asset intake must track upstream paths, commit hashes, license status, attribution, and review notes before release.
 - Phase 1C intentionally does not implement mechanics, formulas, scoring, map data, canvas UI, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
 - Benchmark policy, support and coordination actions, simulation evaluation, and replay-style review are not implemented and must remain offline or post-game only.
+- Phase 1D intentionally does not implement mechanics, formulas, scoring, simulation, map loading, UI canvas, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
 - No commits or tags should be created automatically; both require explicit approval.

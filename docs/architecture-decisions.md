@@ -268,3 +268,23 @@ OpenFront Sandbox should help players learn source-faithful decision quality wit
 ### Tradeoffs
 
 This limits real-time convenience and requires user-provided or officially supported post-game data for replay-style review. It protects fair-play compliance, project credibility, and the distinction between training tools and live-match assistance.
+
+## 2026-06-11
+
+### Decision
+
+Separate source-aligned model infrastructure from source-derived mechanic behavior.
+
+### Options Considered
+
+- Start by implementing a visible mechanic without shared source-reference infrastructure.
+- Build a large simulation framework before implementing any mechanics.
+- Add a small source-aligned model foundation and source-reference helper layer first.
+
+### Reason
+
+Future mechanics need consistent source paths, commit hashes, confidence labels, and model vocabulary before gameplay behavior is added. A small foundation supports the next source-derived mechanic while avoiding fake formulas, invented constants, and premature simulation architecture.
+
+### Tradeoffs
+
+This adds a modest amount of infrastructure before the first mechanic, but keeps the boundary clear: model shapes and source references are implemented, while formulas, scoring, simulation, map loading, and gameplay rules remain out of scope until their specific source review is complete.
