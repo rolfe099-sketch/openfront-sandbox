@@ -32,11 +32,12 @@ Before making project updates, read this file first. After making meaningful cha
 - Added Phase 1E source-derived OpenFront GameMap tile geometry helpers and tests for coordinate/ref conversion, validation, neighbors, distances, and circle search.
 - Added Phase 1F source-derived OpenFront build/action catalogue helpers and tests for unit groups, build menu order, player-buildable membership, and construction kind classification.
 - Added Phase 1G source-derived disabled-unit checks and tests for OpenFront-style `disabledUnits` membership behavior.
+- Added Phase 1H source-aligned build availability preflight boundaries with active catalogue and disabled-unit reasons plus inactive future reason metadata.
 
 ### Notes
 
 - The project now has a website app scaffold, package setup, build scripts, and a minimal test.
-- Only the Phase 1E pure tile geometry primitives, Phase 1F build/action catalogue classification helpers, and Phase 1G disabled-unit membership checks are implemented; broader OpenFront gameplay mechanics are not implemented yet.
+- Only the Phase 1E pure tile geometry primitives, Phase 1F build/action catalogue classification helpers, Phase 1G disabled-unit membership checks, and Phase 1H build availability preflight boundaries are implemented; broader OpenFront gameplay mechanics are not implemented yet.
 - Major features, external integrations, new dependencies, and expanded browser permissions require approval before implementation.
 - Upstream watch reports are informational only and must not automatically change gameplay formulas, fair-play rules, or browser permissions.
 - Phase 1A intentionally does not implement mechanics, scoring, saved scenarios, storage, browser extension runtime behavior, content scripts, OpenFront integration, backend services, or analytics.
@@ -49,4 +50,5 @@ Before making project updates, read this file first. After making meaningful cha
 - Phase 1E intentionally does not implement terrain, ownership, map binaries, map assets, BFS, pathfinding, scoring, simulation, UI canvas, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
 - Phase 1F intentionally does not implement costs, placement legality, disabled-unit checks, economy, construction duration, combat, action execution, UI canvas, UI icons/assets, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
 - Phase 1G intentionally does not implement public-modifier-to-unit mappings, costs, placement legality, economy checks, construction duration, build execution, combat, scoring, simulation, UI canvas, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
+- Phase 1H intentionally does not implement costs, gold checks, placement legality, target tile validation, player alive state, spawn phase logic, upgrade validity, construction duration, construction execution, combat, scoring, simulation, UI canvas, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
 - No commits or tags should be created automatically; both require explicit approval.
