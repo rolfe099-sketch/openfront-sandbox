@@ -1,0 +1,30 @@
+{
+  "lastCheckedAt": null,
+  "openFrontRepo": {
+    "url": "https://github.com/openfrontio/OpenFrontIO",
+    "latestRelease": null,
+    "latestCommit": null
+  },
+  "trackedPages": {
+    "termsOfService": {
+      "url": "https://openfront.io/terms-of-service.html",
+      "lastHash": null,
+      "lastCheckedAt": null
+    },
+    "privacyPolicy": {
+      "url": "https://openfront.io/privacy-policy.html",
+      "lastHash": null,
+      "lastCheckedAt": null
+    }
+  },
+  "lastReportPath": null,
+  "reviewRequired": false,
+  "notes": [
+    "Phase 0 status only: no package setup, app code, mechanics, formulas, scoring, planner behavior, or dependencies are implemented.",
+    "Changelog-first rule applies before updates.",
+    "Long-term north star: fair offline training for OpenFront-style decision reasoning.",
+    "Fair-play sandbox boundary: no live integration, automation, hidden-state reading, client modification, or host permissions without approval.",
+    "Optimal means optimal under stated assumptions, not guaranteed exact OpenFront play.",
+    "Upstream Watch reports are human-review inputs only and must not automatically change mechanics or compliance-sensitive behavior."
+  ]
+}
