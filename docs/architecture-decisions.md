@@ -288,3 +288,23 @@ Future mechanics need consistent source paths, commit hashes, confidence labels,
 ### Tradeoffs
 
 This adds a modest amount of infrastructure before the first mechanic, but keeps the boundary clear: model shapes and source references are implemented, while formulas, scoring, simulation, map loading, and gameplay rules remain out of scope until their specific source review is complete.
+
+## 2026-06-11
+
+### Decision
+
+Use a map surface context abstraction before loading real OpenFront map data.
+
+### Options Considered
+
+- Wait for full OpenFront map loading before adding any surface predicates.
+- Add hardcoded training maps or invented terrain fixtures to production code.
+- Add a small source-derived map surface context that can later be backed by approved OpenFront-derived map data.
+
+### Reason
+
+Future build placement work needs land, water, shore, ocean, shoreline, owner id, and has-owner predicates. A context abstraction lets OpenFront Sandbox implement and test those source-derived questions without copying map assets, inventing maps, or implying build placement legality.
+
+### Tradeoffs
+
+This adds a small abstraction layer before real map loading exists. It keeps the current phase testable and source-faithful, but future phases still need approved map data intake and separate placement legality implementations.
