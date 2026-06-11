@@ -24,6 +24,7 @@ Before making project updates, read this file first. After making meaningful cha
 - Added AGPL-3.0-only project licensing, root `LICENSE`, root `NOTICE`, and package license metadata.
 - Added an OpenFront asset policy and initial asset inventory for future compliant use of open `resources` assets.
 - Updated public docs to support compliance-first, source-derived architecture without copying OpenFront source or assets yet.
+- Added Phase 1C local OpenFront clone verification, source-area mapping, and expanded high-level asset inventory at a pinned upstream commit.
 
 ### Notes
 
@@ -35,4 +36,5 @@ Before making project updates, read this file first. After making meaningful cha
 - Phase 1B intentionally does not implement mechanics, formulas, scoring, maps, canvas UI, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, or analytics.
 - Future mechanics work is source-faithful by default; temporary educational placeholders require explicit approval and visible labeling.
 - Future source and asset intake must track upstream paths, commit hashes, license status, attribution, and review notes before release.
+- Phase 1C intentionally does not implement mechanics, formulas, scoring, map data, canvas UI, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
 - No commits or tags should be created automatically; both require explicit approval.
