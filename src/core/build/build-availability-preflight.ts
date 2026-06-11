@@ -7,10 +7,21 @@ import {
   OpenFrontDisabledUnitsConfig,
   isOpenFrontUnitDisabled,
 } from "./disabled-unit-checks";
+import type { OpenFrontTileGeometry } from "../map/tile-geometry";
 import { OpenFrontUnitType, TileRef } from "../scenario/types";
 import { createOpenFrontSourceReference } from "../source/source-reference";
 
 export const BUILD_AVAILABILITY_PREFLIGHT_SOURCES = {
+  tileRefValidity: createOpenFrontSourceReference({
+    path: "src/core/game/GameMap.ts",
+    symbolName: "GameMap.isValidRef",
+    lineStart: 156,
+    lineEnd: 158,
+    confidence: "source-code verified",
+    exactness: "source-derived behavior",
+    notes:
+      "Source-derived tile ref bounds check used only when a target tile and geometry context are provided.",
+  }),
   playerBuildableCatalogue: createOpenFrontSourceReference({
     path: "src/core/game/Game.ts",
     symbolName: "PlayerBuildable, PlayerBuildableUnitType",
@@ -58,7 +69,7 @@ export const BUILD_AVAILABILITY_PREFLIGHT_SOURCES = {
     confidence: "source-located",
     exactness: "source-aligned model",
     notes:
-      "Source-located construction guards and execution flow. Phase 1H does not execute construction or validate target refs.",
+      "Source-located construction guards and execution flow. Phase 1I validates target ref bounds only; construction execution remains unimplemented.",
   }),
   executionDispatch: createOpenFrontSourceReference({
     path: "src/core/execution/ExecutionManager.ts",
@@ -101,10 +112,10 @@ export const BUILD_AVAILABILITY_PREFLIGHT_SOURCES = {
 export const BUILD_AVAILABILITY_ACTIVE_REASON_ORDER = [
   "not-player-buildable-catalogue-entry",
   "disabled-unit",
+  "invalid-target-ref",
 ] as const;
 
 export const BUILD_AVAILABILITY_FUTURE_REASON_ORDER = [
-  "invalid-target-ref",
   "insufficient-gold",
   "player-not-alive",
   "spawn-phase-blocked",
@@ -123,9 +134,15 @@ export type BuildAvailabilityPreflightStatus =
   | "available-for-future-checks"
   | "blocked";
 
+export type BuildAvailabilityTileGeometry = Pick<
+  OpenFrontTileGeometry,
+  "isValidRef"
+>;
+
 export interface BuildAvailabilityPreflightInput {
   readonly unitType: OpenFrontUnitType;
   readonly targetTile?: TileRef;
+  readonly tileGeometry?: BuildAvailabilityTileGeometry;
   readonly disabledUnitsConfig?: OpenFrontDisabledUnitsConfig;
 }
 
@@ -137,6 +154,18 @@ export interface BuildAvailabilityPreflightResult {
   readonly activeReasons: readonly BuildAvailabilityActiveReason[];
   readonly futureReasons: readonly BuildAvailabilityFutureReason[];
 }
+
+const NOT_FULL_BUILD_LEGALITY_NOTICE =
+  "This is not full OpenFront build legality.";
+
+const ACTIVE_REASON_SUMMARIES: Record<BuildAvailabilityActiveReason, string> = {
+  "not-player-buildable-catalogue-entry":
+    "The unit is not in OpenFront's source-derived player-buildable catalogue.",
+  "disabled-unit":
+    "The unit is listed in the explicit source-derived disabledUnits configuration.",
+  "invalid-target-ref":
+    "The target tile ref is outside the source-derived GameMap ref bounds.",
+};
 
 export function preflightBuildAvailability(
   input: BuildAvailabilityPreflightInput,
@@ -169,5 +198,44 @@ function hasActiveBuildAvailabilityReason(
       return !isPlayerBuildable(input.unitType);
     case "disabled-unit":
       return isOpenFrontUnitDisabled(input.unitType, input.disabledUnitsConfig);
+    case "invalid-target-ref":
+      return (
+        input.targetTile !== undefined &&
+        input.tileGeometry !== undefined &&
+        !input.tileGeometry.isValidRef(input.targetTile)
+      );
   }
+}
+
+export function hasBuildAvailabilityPreflightPassed(
+  result: BuildAvailabilityPreflightResult,
+): boolean {
+  return result.status === "available-for-future-checks";
+}
+
+export function getBuildAvailabilityPreflightSummary(
+  result: BuildAvailabilityPreflightResult,
+): string {
+  if (hasBuildAvailabilityPreflightPassed(result)) {
+    return `Build availability preflight passed for currently implemented source-derived boundary checks. ${NOT_FULL_BUILD_LEGALITY_NOTICE}`;
+  }
+
+  const reasonLabel =
+    result.activeReasons.length === 1 ? "reason" : "reasons";
+
+  return `Build availability preflight blocked by ${result.activeReasons.length} active source-derived ${reasonLabel}. ${NOT_FULL_BUILD_LEGALITY_NOTICE}`;
+}
+
+export function getBuildAvailabilityPreflightReasonSummaries(
+  result: BuildAvailabilityPreflightResult,
+): readonly string[] {
+  if (result.activeReasons.length === 0) {
+    return [
+      `No active preflight boundary reasons were found by currently implemented checks. ${NOT_FULL_BUILD_LEGALITY_NOTICE}`,
+    ];
+  }
+
+  return result.activeReasons.map(
+    (reason) => `${ACTIVE_REASON_SUMMARIES[reason]} ${NOT_FULL_BUILD_LEGALITY_NOTICE}`,
+  );
 }
