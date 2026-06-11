@@ -23,7 +23,7 @@ It must not imply exact OpenFront mechanics, hidden-state awareness, live-game a
 - `unknown`: Relevant source has not been located yet.
 - `source-located`: Relevant source path has been located, but no OpenFront Sandbox implementation has been verified against it.
 - `needs review`: Relevant source exists or is suspected, but the behavior is complex enough to require focused review before implementation.
-- `source-code verified`: Exact source path, commit hash, implementation notes, and tests are recorded. No mechanics are source-code verified yet.
+- `source-code verified`: Exact source path, commit hash, implementation notes, and tests are recorded for the listed scope.
 
 ## Source Inspection Baseline
 
@@ -52,6 +52,7 @@ Phase 1D adds a small TypeScript foundation for source references and scenario s
 
 | Mechanic | OpenFront source path(s) | Checked commit | Last checked | Implementation status | Source status | Exactness | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| GameMap tile geometry primitives | `src/core/game/GameMap.ts` lines 3-51, 131-180, 333-384 | `af2849a2d71a7700a72c077a9e5616e990e584f6` | 2026-06-11 | implemented | source-code verified | source-derived behavior | Implemented in `src/core/map/tile-geometry.ts` with tests in `src/core/map/tile-geometry.test.ts`. Scope is limited to `TileRef`, `ref`, `isValidRef`, `x`, `y`, `isValidCoord`, cardinal `neighbors`, `manhattanDist`, `euclideanDistSquared`, and `circleSearch`. Terrain, ownership, map loading, BFS, pathfinding, scoring, and simulation are not implemented. |
 | Maps/map loading | `resources/maps/**`; `src/core/game/GameMap.ts`; `src/core/game/*GameMapLoader*.ts`; `src/core/game/TerrainMapLoader.ts`; `src/core/game/TerrainSearchMap.ts`; `src/core/pathfinding/**` | `af2849a2d71a7700a72c077a9e5616e990e584f6` | 2026-06-11 | not implemented | needs review | not implemented | Map files are open-asset candidates. Do not copy or adapt maps until per-file licensing and source review are approved. |
 | Deterministic core simulation | `src/core/game/Game.ts`; `src/core/game/GameImpl.ts`; `src/core/game/GameUpdates.ts`; `src/core/game/GameUpdateUtils.ts`; `src/core/execution/ExecutionManager.ts`; `src/core/execution/**` | `af2849a2d71a7700a72c077a9e5616e990e584f6` | 2026-06-11 | not implemented | source-located | not implemented | Core tick behavior is source-located but not modeled. |
 | Game state | `src/core/game/Game.ts`; `src/core/game/GameImpl.ts`; `src/core/game/GameView.ts`; `src/core/game/UnitImpl.ts`; `src/core/game/UnitGrid.ts`; `src/core/game/Stats*.ts`; `src/core/game/WaterManager.ts` | `af2849a2d71a7700a72c077a9e5616e990e584f6` | 2026-06-11 | not implemented | source-located | not implemented | Game, unit, stats, ownership, water, and public view state are source-located. |

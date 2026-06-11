@@ -29,11 +29,12 @@ Before making project updates, read this file first. After making meaningful cha
 - Updated the README contributor process to point coding assistants to `AGENTS.md` before making changes.
 - Added benchmark policy, support and coordination, simulation evaluation, and replay-review architecture boundaries for future offline coaching work.
 - Added Phase 1D source-reference helpers and source-aligned scenario model infrastructure for future source-derived mechanics.
+- Added Phase 1E source-derived OpenFront GameMap tile geometry helpers and tests for coordinate/ref conversion, validation, neighbors, distances, and circle search.
 
 ### Notes
 
 - The project now has a website app scaffold, package setup, build scripts, and a minimal test.
-- OpenFront-related mechanics have not been implemented yet.
+- Only the Phase 1E pure tile geometry primitives are implemented; broader OpenFront gameplay mechanics are not implemented yet.
 - Major features, external integrations, new dependencies, and expanded browser permissions require approval before implementation.
 - Upstream watch reports are informational only and must not automatically change gameplay formulas, fair-play rules, or browser permissions.
 - Phase 1A intentionally does not implement mechanics, scoring, saved scenarios, storage, browser extension runtime behavior, content scripts, OpenFront integration, backend services, or analytics.
@@ -43,4 +44,5 @@ Before making project updates, read this file first. After making meaningful cha
 - Phase 1C intentionally does not implement mechanics, formulas, scoring, map data, canvas UI, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
 - Benchmark policy, support and coordination actions, simulation evaluation, and replay-style review are not implemented and must remain offline or post-game only.
 - Phase 1D intentionally does not implement mechanics, formulas, scoring, simulation, map loading, UI canvas, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
+- Phase 1E intentionally does not implement terrain, ownership, map binaries, map assets, BFS, pathfinding, scoring, simulation, UI canvas, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
 - No commits or tags should be created automatically; both require explicit approval.
