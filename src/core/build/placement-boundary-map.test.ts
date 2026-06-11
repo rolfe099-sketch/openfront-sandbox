@@ -46,16 +46,41 @@ describe("OpenFront placement boundary map", () => {
       .toEqual(OPENFRONT_PLACEMENT_BOUNDARY_CATEGORY_IDS);
   });
 
-  it("marks every placement boundary category as future-only", () => {
+  it("marks only the approved Phase 1K placement boundaries as partially active", () => {
+    const activeCategories = OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES.filter(
+      (category) => category.active,
+    );
+
+    expect(activeCategories.map((category) => category.id)).toEqual([
+      "ownership-checks",
+      "shoreline-coast-water-checks",
+    ]);
+    expect(activeCategories.map((category) => category.activeReasons)).toEqual([
+      ["mirv-target-has-no-owner"],
+      ["warship-target-not-water"],
+    ]);
+    expect(
+      activeCategories.every(
+        (category) => category.implementationStatus === "partially-active",
+      ),
+    ).toBe(true);
+  });
+
+  it("keeps all other placement boundary categories future-only", () => {
+    const futureOnlyCategories = OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES.filter(
+      (category) => !category.active,
+    );
+
     expect(
       areOpenFrontPlacementBoundaryCategoriesFutureOnly(
-        OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES,
+        futureOnlyCategories,
       ),
     ).toBe(true);
 
-    for (const category of OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES) {
+    for (const category of futureOnlyCategories) {
       expect(category.active).toBe(false);
       expect(category.implementationStatus).toBe("future-only");
+      expect(category.activeReasons).toEqual([]);
       expect(category.sourceReferences.length).toBeGreaterThan(0);
     }
   });
@@ -71,6 +96,19 @@ describe("OpenFront placement boundary map", () => {
     expect(category).not.toHaveProperty("implemented");
   });
 
+  it("does not treat partially active categories as full placement legality", () => {
+    const category = getOpenFrontPlacementBoundaryCategory(
+      "shoreline-coast-water-checks",
+    );
+
+    expect(category.active).toBe(true);
+    expect(category.implementationStatus).toBe("partially-active");
+    expect(category.notes).toContain("only the Warship target-water guard");
+    expect(category.notes).toContain("remain future work");
+    expect(category).not.toHaveProperty("canBuild");
+    expect(category).not.toHaveProperty("placementIsLegal");
+  });
+
   it("leaves existing build availability preflight behavior unchanged", () => {
     const tileGeometry = createOpenFrontTileGeometry({ width: 2, height: 2 });
     const result = preflightBuildAvailability({
@@ -83,6 +121,8 @@ describe("OpenFront placement boundary map", () => {
       "not-player-buildable-catalogue-entry",
       "disabled-unit",
       "invalid-target-ref",
+      "warship-target-not-water",
+      "mirv-target-has-no-owner",
     ]);
     expect(result.status).toBe("blocked");
     expect(result.activeReasons).toEqual(["invalid-target-ref"]);

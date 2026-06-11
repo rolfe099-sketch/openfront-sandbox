@@ -6,8 +6,8 @@ OpenFront Sandbox is not affiliated with or endorsed by OpenFront unless otherwi
 
 ## Status
 
-- Current phase: Phase 1J
-- Current focus: source-derived map surface primitives and placement boundary mapping
+- Current phase: Phase 1K
+- Current focus: source-derived placement preflight blockers
 - Playable mechanics: not implemented yet
 - Live match integration: not implemented and not planned without explicit review
 - Local app shell: available
@@ -50,7 +50,7 @@ Any feature that could become a live gameplay advantage or cheat-adjacent behavi
 - Source-derived pure tile geometry helpers for OpenFront-style map coordinates.
 - Source-derived build/action catalogue helpers for OpenFront unit groups and build menu order.
 - Source-derived disabled-unit checks for explicit OpenFront-style `disabledUnits` configuration.
-- Source-derived build availability preflight boundaries and map surface/context helpers.
+- Source-derived build availability preflight boundaries, narrow placement blockers, and map surface/context helpers.
 - Reserved browser extension folder structure with no runtime behavior or permissions.
 
 There are no playable mechanics, planner formulas, scoring systems, saved scenarios, browser permissions, extension runtime behavior, content scripts, OpenFront integrations, backend services, analytics, or storage features.

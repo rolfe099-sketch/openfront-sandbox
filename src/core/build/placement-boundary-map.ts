@@ -1,4 +1,7 @@
-import { createOpenFrontSourceReference, SourceReference } from "../source/source-reference";
+import {
+  SourceReference,
+  createOpenFrontSourceReference,
+} from "../source/source-reference";
 
 export const PLACEMENT_BOUNDARY_SOURCES = {
   gameMapSurfaceAndOwnership: createOpenFrontSourceReference({
@@ -44,9 +47,20 @@ export const PLACEMENT_BOUNDARY_SOURCES = {
     symbolName: "PlayerImpl.warshipSpawn",
     lineStart: 1332,
     lineEnd: 1349,
-    confidence: "source-located",
-    exactness: "not implemented",
-    notes: "Source-located water and port/water-component flow for warship spawning.",
+    confidence: "source-code verified",
+    exactness: "source-derived behavior",
+    notes:
+      "Source-located warship spawning flow. Phase 1K implements only the first target-water guard; port and water-component behavior remain future work.",
+  }),
+  mirvTargetOwner: createOpenFrontSourceReference({
+    path: "src/core/game/PlayerImpl.ts",
+    symbolName: "PlayerImpl.canSpawnUnitType",
+    lineStart: 1224,
+    lineEnd: 1232,
+    confidence: "source-code verified",
+    exactness: "source-derived behavior",
+    notes:
+      "Source-located MIRV branch. Phase 1K implements only the target has-owner guard before nukeSpawn.",
   }),
   landAndStructureSpawn: createOpenFrontSourceReference({
     path: "src/core/game/PlayerImpl.ts",
@@ -126,13 +140,20 @@ export const OPENFRONT_PLACEMENT_BOUNDARY_CATEGORY_IDS = [
 export type OpenFrontPlacementBoundaryCategoryId =
   (typeof OPENFRONT_PLACEMENT_BOUNDARY_CATEGORY_IDS)[number];
 
-export type OpenFrontPlacementBoundaryImplementationStatus = "future-only";
+export type OpenFrontPlacementBoundaryImplementationStatus =
+  | "future-only"
+  | "partially-active";
+
+export type OpenFrontPlacementBoundaryActiveReason =
+  | "warship-target-not-water"
+  | "mirv-target-has-no-owner";
 
 export interface OpenFrontPlacementBoundaryCategory {
   readonly id: OpenFrontPlacementBoundaryCategoryId;
   readonly label: string;
   readonly implementationStatus: OpenFrontPlacementBoundaryImplementationStatus;
-  readonly active: false;
+  readonly active: boolean;
+  readonly activeReasons: readonly OpenFrontPlacementBoundaryActiveReason[];
   readonly sourceReferences: readonly SourceReference[];
   readonly notes: string;
 }
@@ -143,6 +164,7 @@ export const OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES = [
     label: "Terrain and surface checks",
     implementationStatus: "future-only",
     active: false,
+    activeReasons: [],
     sourceReferences: [
       PLACEMENT_BOUNDARY_SOURCES.gameMapSurfaceAndOwnership,
       PLACEMENT_BOUNDARY_SOURCES.playerSpawnDispatch,
@@ -153,34 +175,38 @@ export const OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES = [
   {
     id: "ownership-checks",
     label: "Ownership checks",
-    implementationStatus: "future-only",
-    active: false,
+    implementationStatus: "partially-active",
+    active: true,
+    activeReasons: ["mirv-target-has-no-owner"],
     sourceReferences: [
       PLACEMENT_BOUNDARY_SOURCES.gameMapSurfaceAndOwnership,
       PLACEMENT_BOUNDARY_SOURCES.playerSpawnDispatch,
       PLACEMENT_BOUNDARY_SOURCES.landAndStructureSpawn,
+      PLACEMENT_BOUNDARY_SOURCES.mirvTargetOwner,
     ],
     notes:
-      "Future checks may use owner ids and ownership comparisons. Phase 1J does not implement ownership-based build legality.",
+      "Phase 1K implements only the MIRV target has-owner guard. Broader ownership-based build legality remains future work.",
   },
   {
     id: "shoreline-coast-water-checks",
     label: "Shoreline, coast, and water checks",
-    implementationStatus: "future-only",
-    active: false,
+    implementationStatus: "partially-active",
+    active: true,
+    activeReasons: ["warship-target-not-water"],
     sourceReferences: [
       PLACEMENT_BOUNDARY_SOURCES.gameMapSurfaceAndOwnership,
       PLACEMENT_BOUNDARY_SOURCES.portSpawn,
       PLACEMENT_BOUNDARY_SOURCES.warshipSpawn,
     ],
     notes:
-      "Future checks may distinguish shore, water, and water components. Phase 1J does not implement port or warship placement.",
+      "Phase 1K implements only the Warship target-water guard. Port placement, shore behavior, and water-component behavior remain future work.",
   },
   {
     id: "port-spawn-radius",
     label: "Port spawn radius behavior",
     implementationStatus: "future-only",
     active: false,
+    activeReasons: [],
     sourceReferences: [
       PLACEMENT_BOUNDARY_SOURCES.portSpawn,
       PLACEMENT_BOUNDARY_SOURCES.configPlacementValues,
@@ -193,6 +219,7 @@ export const OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES = [
     label: "Valid structure tile search",
     implementationStatus: "future-only",
     active: false,
+    activeReasons: [],
     sourceReferences: [
       PLACEMENT_BOUNDARY_SOURCES.landAndStructureSpawn,
       PLACEMENT_BOUNDARY_SOURCES.configPlacementValues,
@@ -205,6 +232,7 @@ export const OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES = [
     label: "Transport ship spatial behavior",
     implementationStatus: "future-only",
     active: false,
+    activeReasons: [],
     sourceReferences: [
       PLACEMENT_BOUNDARY_SOURCES.transportShipUtils,
       PLACEMENT_BOUNDARY_SOURCES.configPlacementValues,
@@ -217,6 +245,7 @@ export const OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES = [
     label: "Trade ship targeting",
     implementationStatus: "future-only",
     active: false,
+    activeReasons: [],
     sourceReferences: [PLACEMENT_BOUNDARY_SOURCES.tradeShipSpawn],
     notes:
       "Future trade ship targeting must remain separate from normal player build menu behavior.",
@@ -226,6 +255,7 @@ export const OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES = [
     label: "Nuke and silo targeting",
     implementationStatus: "future-only",
     active: false,
+    activeReasons: [],
     sourceReferences: [
       PLACEMENT_BOUNDARY_SOURCES.nukeSpawn,
       PLACEMENT_BOUNDARY_SOURCES.playerSpawnDispatch,
@@ -238,6 +268,7 @@ export const OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES = [
     label: "Structure distance rules",
     implementationStatus: "future-only",
     active: false,
+    activeReasons: [],
     sourceReferences: [
       PLACEMENT_BOUNDARY_SOURCES.landAndStructureSpawn,
       PLACEMENT_BOUNDARY_SOURCES.configPlacementValues,
@@ -250,6 +281,7 @@ export const OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES = [
     label: "Costs, gold, and player state",
     implementationStatus: "future-only",
     active: false,
+    activeReasons: [],
     sourceReferences: [
       PLACEMENT_BOUNDARY_SOURCES.canBuildUnitType,
       PLACEMENT_BOUNDARY_SOURCES.configPlacementValues,
@@ -262,6 +294,7 @@ export const OPENFRONT_PLACEMENT_BOUNDARY_CATEGORIES = [
     label: "Construction execution",
     implementationStatus: "future-only",
     active: false,
+    activeReasons: [],
     sourceReferences: [PLACEMENT_BOUNDARY_SOURCES.constructionExecution],
     notes:
       "Future construction behavior must be implemented separately from preflight and surface inspection.",

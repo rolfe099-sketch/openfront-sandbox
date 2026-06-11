@@ -8,16 +8,28 @@ import {
   hasBuildAvailabilityPreflightPassed,
   preflightBuildAvailability,
 } from "./build-availability-preflight";
+import type { BuildAvailabilityMapSurfaceContext } from "./build-availability-preflight";
 import { createOpenFrontTileGeometry } from "../map/tile-geometry";
 import { OPENFRONT_UNIT_TYPES } from "../scenario/types";
 
+const TEST_TILE_GEOMETRY = createOpenFrontTileGeometry({
+  width: 4,
+  height: 3,
+});
+
 describe("OpenFront build availability preflight", () => {
-  const tileGeometry = createOpenFrontTileGeometry({ width: 4, height: 3 });
+  const tileGeometry = TEST_TILE_GEOMETRY;
 
   it("records source references for preflight boundaries", () => {
     expect(
       BUILD_AVAILABILITY_PREFLIGHT_SOURCES.tileRefValidity.symbolName,
     ).toBe("GameMap.isValidRef");
+    expect(
+      BUILD_AVAILABILITY_PREFLIGHT_SOURCES.warshipTargetWater.symbolName,
+    ).toBe("PlayerImpl.warshipSpawn");
+    expect(
+      BUILD_AVAILABILITY_PREFLIGHT_SOURCES.mirvTargetOwner.symbolName,
+    ).toBe("PlayerImpl.canSpawnUnitType");
     expect(
       BUILD_AVAILABILITY_PREFLIGHT_SOURCES.playerBuildableCatalogue.symbolName,
     ).toContain("PlayerBuildable");
@@ -34,6 +46,8 @@ describe("OpenFront build availability preflight", () => {
       "not-player-buildable-catalogue-entry",
       "disabled-unit",
       "invalid-target-ref",
+      "warship-target-not-water",
+      "mirv-target-has-no-owner",
     ]);
     expect(BUILD_AVAILABILITY_FUTURE_REASON_ORDER).toEqual([
       "insufficient-gold",
@@ -161,6 +175,142 @@ describe("OpenFront build availability preflight", () => {
     expect(result.activeReasons).toEqual([]);
   });
 
+  it("blocks Warship targets that are not water when map surface context is provided", () => {
+    const result = preflightBuildAvailability({
+      unitType: OPENFRONT_UNIT_TYPES.Warship,
+      targetTile: 0,
+      mapSurfaceContext: createBuildAvailabilityMapSurfaceContext({
+        waterTiles: [1],
+        ownerTiles: [],
+      }),
+    });
+
+    expect(result.status).toBe("blocked");
+    expect(result.activeReasons).toEqual(["warship-target-not-water"]);
+  });
+
+  it("allows Warship targets through current checks when the target is water", () => {
+    const result = preflightBuildAvailability({
+      unitType: OPENFRONT_UNIT_TYPES.Warship,
+      targetTile: 1,
+      mapSurfaceContext: createBuildAvailabilityMapSurfaceContext({
+        waterTiles: [1],
+        ownerTiles: [],
+      }),
+    });
+
+    expect(result.status).toBe("available-for-future-checks");
+    expect(result.activeReasons).toEqual([]);
+  });
+
+  it("does not run the Warship water blocker without map surface context", () => {
+    const result = preflightBuildAvailability({
+      unitType: OPENFRONT_UNIT_TYPES.Warship,
+      targetTile: 0,
+    });
+
+    expect(result.status).toBe("available-for-future-checks");
+    expect(result.activeReasons).toEqual([]);
+  });
+
+  it("does not read Warship water state when the target ref is invalid", () => {
+    let isWaterReads = 0;
+    const result = preflightBuildAvailability({
+      unitType: OPENFRONT_UNIT_TYPES.Warship,
+      targetTile: -1,
+      mapSurfaceContext: {
+        isValidRef: () => false,
+        isWater: () => {
+          isWaterReads++;
+          return false;
+        },
+        hasOwner: () => true,
+      },
+    });
+
+    expect(result.status).toBe("blocked");
+    expect(result.activeReasons).toEqual(["invalid-target-ref"]);
+    expect(isWaterReads).toBe(0);
+  });
+
+  it("blocks MIRV targets that have no owner when map surface context is provided", () => {
+    const result = preflightBuildAvailability({
+      unitType: OPENFRONT_UNIT_TYPES.MIRV,
+      targetTile: 0,
+      mapSurfaceContext: createBuildAvailabilityMapSurfaceContext({
+        waterTiles: [],
+        ownerTiles: [1],
+      }),
+    });
+
+    expect(result.status).toBe("blocked");
+    expect(result.activeReasons).toEqual(["mirv-target-has-no-owner"]);
+  });
+
+  it("allows MIRV targets through current checks when the target has an owner", () => {
+    const result = preflightBuildAvailability({
+      unitType: OPENFRONT_UNIT_TYPES.MIRV,
+      targetTile: 1,
+      mapSurfaceContext: createBuildAvailabilityMapSurfaceContext({
+        waterTiles: [],
+        ownerTiles: [1],
+      }),
+    });
+
+    expect(result.status).toBe("available-for-future-checks");
+    expect(result.activeReasons).toEqual([]);
+  });
+
+  it("does not run the MIRV owner blocker without map surface context", () => {
+    const result = preflightBuildAvailability({
+      unitType: OPENFRONT_UNIT_TYPES.MIRV,
+      targetTile: 0,
+    });
+
+    expect(result.status).toBe("available-for-future-checks");
+    expect(result.activeReasons).toEqual([]);
+  });
+
+  it("does not read MIRV ownership state when the target ref is invalid", () => {
+    let hasOwnerReads = 0;
+    const result = preflightBuildAvailability({
+      unitType: OPENFRONT_UNIT_TYPES.MIRV,
+      targetTile: -1,
+      mapSurfaceContext: {
+        isValidRef: () => false,
+        isWater: () => true,
+        hasOwner: () => {
+          hasOwnerReads++;
+          return false;
+        },
+      },
+    });
+
+    expect(result.status).toBe("blocked");
+    expect(result.activeReasons).toEqual(["invalid-target-ref"]);
+    expect(hasOwnerReads).toBe(0);
+  });
+
+  it("keeps new placement blockers after existing active reasons", () => {
+    const result = preflightBuildAvailability({
+      unitType: OPENFRONT_UNIT_TYPES.Warship,
+      targetTile: 0,
+      disabledUnitsConfig: {
+        disabledUnits: [OPENFRONT_UNIT_TYPES.Warship],
+      },
+      mapSurfaceContext: createBuildAvailabilityMapSurfaceContext({
+        waterTiles: [],
+        ownerTiles: [],
+      }),
+    });
+
+    expect(result.status).toBe("blocked");
+    expect(result.activeReasons).toEqual([
+      "disabled-unit",
+      "warship-target-not-water",
+    ]);
+  });
+
   it("does not validate when targetTile is missing", () => {
     const result = preflightBuildAvailability({
       unitType: OPENFRONT_UNIT_TYPES.Factory,
@@ -225,6 +375,21 @@ describe("OpenFront build availability preflight", () => {
     ]);
   });
 
+  it("summarizes source-derived placement blockers cautiously", () => {
+    const blocked = preflightBuildAvailability({
+      unitType: OPENFRONT_UNIT_TYPES.Warship,
+      targetTile: 0,
+      mapSurfaceContext: createBuildAvailabilityMapSurfaceContext({
+        waterTiles: [],
+        ownerTiles: [],
+      }),
+    });
+
+    expect(getBuildAvailabilityPreflightReasonSummaries(blocked)).toEqual([
+      "The Warship target tile is not water under the provided source-derived map surface context. This is not full OpenFront build legality.",
+    ]);
+  });
+
   it("keeps future reasons as metadata only", () => {
     const result = preflightBuildAvailability({
       unitType: OPENFRONT_UNIT_TYPES.Warship,
@@ -241,3 +406,17 @@ describe("OpenFront build availability preflight", () => {
     expect(result).not.toHaveProperty("gold");
   });
 });
+
+function createBuildAvailabilityMapSurfaceContext(input: {
+  readonly waterTiles: readonly number[];
+  readonly ownerTiles: readonly number[];
+}): BuildAvailabilityMapSurfaceContext {
+  const waterTiles = new Set(input.waterTiles);
+  const ownerTiles = new Set(input.ownerTiles);
+
+  return {
+    isValidRef: (tile) => TEST_TILE_GEOMETRY.isValidRef(tile),
+    isWater: (tile) => waterTiles.has(tile),
+    hasOwner: (tile) => ownerTiles.has(tile),
+  };
+}

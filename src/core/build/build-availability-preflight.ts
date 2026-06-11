@@ -7,8 +7,13 @@ import {
   OpenFrontDisabledUnitsConfig,
   isOpenFrontUnitDisabled,
 } from "./disabled-unit-checks";
+import type { OpenFrontMapSurfaceContext } from "../map/map-surface";
 import type { OpenFrontTileGeometry } from "../map/tile-geometry";
-import { OpenFrontUnitType, TileRef } from "../scenario/types";
+import {
+  OPENFRONT_UNIT_TYPES,
+  OpenFrontUnitType,
+  TileRef,
+} from "../scenario/types";
 import { createOpenFrontSourceReference } from "../source/source-reference";
 
 export const BUILD_AVAILABILITY_PREFLIGHT_SOURCES = {
@@ -21,6 +26,26 @@ export const BUILD_AVAILABILITY_PREFLIGHT_SOURCES = {
     exactness: "source-derived behavior",
     notes:
       "Source-derived tile ref bounds check used only when a target tile and geometry context are provided.",
+  }),
+  warshipTargetWater: createOpenFrontSourceReference({
+    path: "src/core/game/PlayerImpl.ts",
+    symbolName: "PlayerImpl.warshipSpawn",
+    lineStart: 1332,
+    lineEnd: 1336,
+    confidence: "source-code verified",
+    exactness: "source-derived behavior",
+    notes:
+      "First source guard for Warship spawn: non-water target tiles are rejected.",
+  }),
+  mirvTargetOwner: createOpenFrontSourceReference({
+    path: "src/core/game/PlayerImpl.ts",
+    symbolName: "PlayerImpl.canSpawnUnitType",
+    lineStart: 1224,
+    lineEnd: 1232,
+    confidence: "source-code verified",
+    exactness: "source-derived behavior",
+    notes:
+      "Source MIRV branch rejects target tiles without an owner before delegating to nukeSpawn.",
   }),
   playerBuildableCatalogue: createOpenFrontSourceReference({
     path: "src/core/game/Game.ts",
@@ -113,6 +138,8 @@ export const BUILD_AVAILABILITY_ACTIVE_REASON_ORDER = [
   "not-player-buildable-catalogue-entry",
   "disabled-unit",
   "invalid-target-ref",
+  "warship-target-not-water",
+  "mirv-target-has-no-owner",
 ] as const;
 
 export const BUILD_AVAILABILITY_FUTURE_REASON_ORDER = [
@@ -138,11 +165,16 @@ export type BuildAvailabilityTileGeometry = Pick<
   OpenFrontTileGeometry,
   "isValidRef"
 >;
+export type BuildAvailabilityMapSurfaceContext = Pick<
+  OpenFrontMapSurfaceContext,
+  "isValidRef" | "isWater" | "hasOwner"
+>;
 
 export interface BuildAvailabilityPreflightInput {
   readonly unitType: OpenFrontUnitType;
   readonly targetTile?: TileRef;
   readonly tileGeometry?: BuildAvailabilityTileGeometry;
+  readonly mapSurfaceContext?: BuildAvailabilityMapSurfaceContext;
   readonly disabledUnitsConfig?: OpenFrontDisabledUnitsConfig;
 }
 
@@ -165,6 +197,10 @@ const ACTIVE_REASON_SUMMARIES: Record<BuildAvailabilityActiveReason, string> = {
     "The unit is listed in the explicit source-derived disabledUnits configuration.",
   "invalid-target-ref":
     "The target tile ref is outside the source-derived GameMap ref bounds.",
+  "warship-target-not-water":
+    "The Warship target tile is not water under the provided source-derived map surface context.",
+  "mirv-target-has-no-owner":
+    "The MIRV target tile has no owner under the provided source-derived map surface context.",
 };
 
 export function preflightBuildAvailability(
@@ -199,12 +235,46 @@ function hasActiveBuildAvailabilityReason(
     case "disabled-unit":
       return isOpenFrontUnitDisabled(input.unitType, input.disabledUnitsConfig);
     case "invalid-target-ref":
-      return (
-        input.targetTile !== undefined &&
-        input.tileGeometry !== undefined &&
-        !input.tileGeometry.isValidRef(input.targetTile)
-      );
+      return hasInvalidTargetRef(input);
+    case "warship-target-not-water":
+      if (input.unitType !== OPENFRONT_UNIT_TYPES.Warship) {
+        return false;
+      }
+      if (!hasValidMapSurfaceTarget(input)) {
+        return false;
+      }
+      return !input.mapSurfaceContext.isWater(input.targetTile);
+    case "mirv-target-has-no-owner":
+      if (input.unitType !== OPENFRONT_UNIT_TYPES.MIRV) {
+        return false;
+      }
+      if (!hasValidMapSurfaceTarget(input)) {
+        return false;
+      }
+      return !input.mapSurfaceContext.hasOwner(input.targetTile);
   }
+}
+
+function hasInvalidTargetRef(input: BuildAvailabilityPreflightInput): boolean {
+  if (input.targetTile === undefined) {
+    return false;
+  }
+
+  const validityContext = input.tileGeometry ?? input.mapSurfaceContext;
+  return validityContext !== undefined && !validityContext.isValidRef(input.targetTile);
+}
+
+function hasValidMapSurfaceTarget(
+  input: BuildAvailabilityPreflightInput,
+): input is BuildAvailabilityPreflightInput & {
+  readonly targetTile: TileRef;
+  readonly mapSurfaceContext: BuildAvailabilityMapSurfaceContext;
+} {
+  return (
+    input.targetTile !== undefined &&
+    input.mapSurfaceContext !== undefined &&
+    input.mapSurfaceContext.isValidRef(input.targetTile)
+  );
 }
 
 export function hasBuildAvailabilityPreflightPassed(
