@@ -25,6 +25,7 @@ export interface SourceReference {
   readonly commitHash: string;
   readonly checkedDate: string;
   readonly path: string;
+  readonly symbolName?: string;
   readonly lineStart?: number;
   readonly lineEnd?: number;
   readonly confidence: SourceConfidence;
@@ -34,6 +35,7 @@ export interface SourceReference {
 
 export interface OpenFrontSourceReferenceInput {
   readonly path: string;
+  readonly symbolName?: string;
   readonly lineStart?: number;
   readonly lineEnd?: number;
   readonly confidence: SourceConfidence;
@@ -61,6 +63,7 @@ export function createOpenFrontSourceReference(
     commitHash: input.commitHash ?? OPENFRONT_SOURCE_BASELINE.commitHash,
     checkedDate: input.checkedDate ?? OPENFRONT_SOURCE_BASELINE.checkedDate,
     path: input.path,
+    symbolName: input.symbolName,
     lineStart: input.lineStart,
     lineEnd: input.lineEnd,
     confidence: input.confidence,
@@ -91,6 +94,13 @@ export function assertValidSourceReference(
     throw new Error("OpenFront source references must use repository-relative paths.");
   }
 
+  if (
+    reference.symbolName !== undefined &&
+    reference.symbolName.trim().length === 0
+  ) {
+    throw new Error("OpenFront source symbolName cannot be empty when provided.");
+  }
+
   if (reference.lineStart !== undefined && !isPositiveInteger(reference.lineStart)) {
     throw new Error("OpenFront source lineStart must be a positive integer.");
   }
@@ -117,7 +127,10 @@ export function formatSourceReference(reference: SourceReference): string {
         ? `:${reference.lineStart}`
         : `:${reference.lineStart}-${reference.lineEnd}`;
 
-  return `${reference.path}${linePart}@${reference.commitHash.slice(0, 12)}`;
+  const symbolPart =
+    reference.symbolName === undefined ? "" : `#${reference.symbolName}`;
+
+  return `${reference.path}${symbolPart}${linePart}@${reference.commitHash.slice(0, 12)}`;
 }
 
 export function hasReviewableSource(reference: SourceReference): boolean {

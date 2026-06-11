@@ -6,8 +6,8 @@ OpenFront Sandbox is not affiliated with or endorsed by OpenFront unless otherwi
 
 ## Status
 
-- Current phase: Phase 1E
-- Current focus: source-derived OpenFront GameMap tile geometry primitives
+- Current phase: Phase 1F
+- Current focus: source-derived OpenFront build/action catalogue foundation
 - Playable mechanics: not implemented yet
 - Live match integration: not implemented and not planned without explicit review
 - Local app shell: available
@@ -48,6 +48,7 @@ Any feature that could become a live gameplay advantage or cheat-adjacent behavi
 - Source and asset intake policy for future OpenFront-derived work.
 - Upstream watch process for source, release, and policy awareness.
 - Source-derived pure tile geometry helpers for OpenFront-style map coordinates.
+- Source-derived build/action catalogue helpers for OpenFront unit groups and build menu order.
 - Reserved browser extension folder structure with no runtime behavior or permissions.
 
 There are no playable mechanics, planner formulas, scoring systems, saved scenarios, browser permissions, extension runtime behavior, content scripts, OpenFront integrations, backend services, analytics, or storage features.

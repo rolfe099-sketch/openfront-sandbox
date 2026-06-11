@@ -35,6 +35,14 @@ OpenFront Sandbox now implements a source-derived, pure TypeScript subset of Ope
 
 Implemented scope: `TileRef`, `ref`, `isValidRef`, `x`, `y`, `isValidCoord`, cardinal `neighbors`, `manhattanDist`, `euclideanDistSquared`, and `circleSearch`. This does not implement terrain bytes, mutable tile state, ownership, fallout, water/shore behavior, BFS, pathfinding, map binaries, map assets, scoring, simulation, or UI rendering.
 
+## Phase 1F Build Action Catalogue
+
+OpenFront Sandbox now implements a source-derived, pure TypeScript catalogue of OpenFront build/action vocabulary in `src/core/build/build-action-catalogue.ts`.
+
+Implemented scope: `Nukes`, `Structures`, `BuildableAttacks`, `BuildMenus`, `PlayerBuildable`, normal build menu display order, source-present internal unit exclusions, and structure vs non-structure construction classification. This preserves source terminology, including OpenFront's `BuildableAttacks` group containing `Warship`.
+
+This does not implement costs, placement legality, disabled-unit/modifier checks, economy, construction duration, combat, action execution, UI icons/assets, scoring, simulation, or browser/extension behavior.
+
 ## Source Areas
 
 | Area | Likely source path/file | Status | Notes | Safe to implement now? |
@@ -43,6 +51,7 @@ Implemented scope: `TileRef`, `ref`, `isValidRef`, `x`, `y`, `isValidCoord`, car
 | Game state | `src/core/game/Game.ts`; `src/core/game/GameImpl.ts`; `src/core/game/GameView.ts`; `src/core/game/UnitImpl.ts`; `src/core/game/UnitGrid.ts`; `src/core/game/Stats.ts`; `src/core/game/StatsImpl.ts`; `src/core/game/WaterManager.ts` | located | Game, unit, map ownership, stats, water, and public view state are source-located. | Needs more review. |
 | Maps/map loading | `resources/maps/**`; `src/core/game/GameMap.ts`; `src/core/game/GameMapLoader.ts`; `src/core/game/BinaryLoaderGameMapLoader.ts`; `src/core/game/FetchGameMapLoader.ts`; `src/core/game/TerrainMapLoader.ts`; `src/core/game/TerrainSearchMap.ts`; `src/core/pathfinding/**` | located | Map directories contain `manifest.json`, `map.bin`, `map4x.bin`, `map16x.bin`, and `thumbnail.webp` patterns. Map files are open-asset candidates and need per-file asset review before reuse. | Needs more review. |
 | GameMap tile geometry primitives | `src/core/game/GameMap.ts` lines 3-51, 131-180, 333-384 | implemented for listed scope | Pure tile geometry helpers are implemented in `src/core/map/tile-geometry.ts` with source-derived tests. | Implemented for listed helpers only. |
+| Build/action catalogue and grouping | `src/core/game/Game.ts`; `src/core/execution/ConstructionExecution.ts`; `src/core/game/PlayerImpl.ts`; `src/client/hud/layers/BuildMenu.ts`; `src/core/execution/ExecutionManager.ts`; `src/core/GameRunner.ts`; `src/core/worker/WorkerMessages.ts` | implemented for listed scope | Source-derived build/action vocabulary and grouping helpers are implemented in `src/core/build/build-action-catalogue.ts` with tests. UI icon paths and asset references from `BuildMenu.ts` are intentionally not used. | Implemented for catalogue/classification only. |
 | Player/nation state | `src/core/game/PlayerImpl.ts`; `src/core/game/Game.ts`; `src/core/game/NationCreation.ts`; `src/core/execution/NationExecution.ts`; `src/core/execution/TribeExecution.ts`; `src/core/execution/TribeSpawner.ts`; `src/core/execution/nation/**` | located | Player resource state, relations, nation spawning, nation behavior, and tribe behavior are source-located but complex. | Needs more review. |
 | Troops/population | `src/core/game/PlayerImpl.ts`; `src/core/configuration/Config.ts`; `src/core/execution/AttackExecution.ts`; `src/core/execution/PlayerExecution.ts`; `src/core/execution/DonateTroopExecution.ts`; `src/core/game/Game.ts` | located | Troop growth, caps, donations, attacks, tile ownership, and player state need focused source tracing. | Needs more review. |
 | Gold/economy | `src/core/configuration/Config.ts`; `src/core/game/PlayerImpl.ts`; `src/core/execution/DonateGoldExecution.ts`; `src/core/execution/TradeShipExecution.ts`; `src/core/execution/TrainExecution.ts`; `src/core/execution/PortExecution.ts`; `src/core/execution/FactoryExecution.ts`; `src/core/game/RailNetworkImpl.ts` | located | Gold income, costs, donations, trade ships, trains, rail connections, ports, and factories are source-located. Do not copy values until reviewed. | Needs more review. |

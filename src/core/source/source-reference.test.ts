@@ -20,6 +20,7 @@ describe("OpenFront source references", () => {
   it("creates a validated repository-relative source reference", () => {
     const reference = createOpenFrontSourceReference({
       path: "src/core/game/Game.ts",
+      symbolName: "PlayerID/Tick/Gold",
       lineStart: 25,
       lineEnd: 27,
       confidence: "source-located",
@@ -27,8 +28,9 @@ describe("OpenFront source references", () => {
     });
 
     expect(reference.branch).toBe("main");
+    expect(reference.symbolName).toBe("PlayerID/Tick/Gold");
     expect(formatSourceReference(reference)).toBe(
-      "src/core/game/Game.ts:25-27@af2849a2d71a",
+      "src/core/game/Game.ts#PlayerID/Tick/Gold:25-27@af2849a2d71a",
     );
     expect(hasReviewableSource(reference)).toBe(true);
   });
@@ -41,6 +43,15 @@ describe("OpenFront source references", () => {
         exactness: "source-aligned model",
       }),
     ).toThrow(/repository-relative/);
+
+    expect(() =>
+      createOpenFrontSourceReference({
+        path: "src/core/game/Game.ts",
+        symbolName: "",
+        confidence: "source-located",
+        exactness: "source-aligned model",
+      }),
+    ).toThrow(/symbolName/);
 
     expect(() =>
       createOpenFrontSourceReference({
