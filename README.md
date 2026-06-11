@@ -1,6 +1,8 @@
 # OpenFront Sandbox
 
-OpenFront Sandbox is planned as an offline, manual training environment for learning OpenFront-style decision making without touching live gameplay.
+OpenFront Sandbox is an independent, fair-play, offline training sandbox for learning OpenFront-style decision making without touching live gameplay.
+
+It aims to be source-faithful to OpenFront where legally and technically practical. OpenFront Sandbox is not affiliated with or endorsed by OpenFront unless otherwise stated.
 
 ## Long-Term North Star
 
@@ -10,6 +12,7 @@ The long-term north star is to help a player reason clearly about OpenFront stra
 
 Phase 0 and Phase 1 stay inside a sandbox/manual/offline boundary:
 
+- No interaction with live matches
 - No OpenFront page integration
 - No content scripts
 - No live overlays
@@ -33,6 +36,32 @@ The upstream watch process tracks OpenFront source, releases, terms, privacy pol
 
 Read `docs/upstream-watch.md` and `docs/upstream-status.json` before mechanics or compliance-sensitive changes. If `reviewRequired` is true, stop and ask for approval.
 
+## Source Intake and Licensing
+
+OpenFront source research uses an ignored local clone at `.external/openfront`. Future approved source or asset intake should use direct OpenFront public source and open assets where legally allowed, technically useful, and tracked.
+
+Do not commit OpenFront source code, maps, resources, proprietary assets, or generated copies of those materials into this repository until the specific intake is approved and documented.
+
+Licensing and source-intake notes live in:
+
+- `docs/licensing-and-attribution.md`
+- `docs/openfront-asset-policy.md`
+- `docs/openfront-asset-inventory.md`
+- `docs/openfront-source-map.md`
+- `docs/openfront-mechanics-sources.md`
+
+OpenFront Sandbox is source-faithful by default. Do not add invented mechanics, fake formulas, fake constants, fake maps, or arbitrary gameplay values unless they are explicitly approved as temporary educational placeholders. Proprietary, external, premium, or unknown-license OpenFront assets are not used.
+
+## License and Attribution
+
+OpenFront Sandbox code is licensed under AGPL-3.0-only. See `LICENSE`.
+
+OpenFront-derived code, if added later, will be handled under AGPL-compatible terms and tracked with upstream paths, commit hashes, license status, and change notes.
+
+OpenFront open assets from upstream `/resources`, if added later, will be tracked and attributed under CC BY-SA 4.0 unless otherwise indicated by upstream files. Proprietary or unknown-license OpenFront assets are not used.
+
+OpenFront Sandbox preserves OpenFront attribution in `NOTICE`. OpenFront is © OpenFront and Contributors. OpenFront Sandbox is not affiliated with or endorsed by OpenFront unless otherwise stated.
+
 ## Changelog-First Rule
 
 Before updating the project, read `CHANGELOG.md`. After meaningful changes, update it so future work can recover the current state quickly after context compaction.
@@ -45,20 +74,23 @@ Before updating the project, read `CHANGELOG.md`. After meaningful changes, upda
 - Maintain project discipline, architecture decisions, mechanics source tracking, and upstream watch docs.
 - Keep the repo free of app code, dependencies, mechanics, scoring, and planner formulas until Phase 1 is approved.
 
-### Phase 1: Local Training App, Pending Approval
+### Phase 1: Local Training App
 
 - Scaffold a minimal local app shell.
+- Inspect licensing and source structure before implementing mechanics.
 - Keep data local.
 - Avoid host permissions.
 - Use no OpenFront page integration.
-- Present unverified logic as training assumptions.
+- Use source-faithful mechanics by default; temporary placeholders require explicit approval and visible labeling.
 - Reserve extension folder structure without runtime behavior.
+- Proceed through subphases only after approval.
 
 ### Later Phases, Approval Required
 
 - Saved scenarios through local browser storage.
 - More detailed scenario tools.
 - Source-verified mechanic models.
+- Approved source-derived mechanics and open asset intake with attribution tracking.
 - Supporter-only ideas documented for later, not paywalled into core learning.
 
 Major features such as live overlays, content scripts, AI opponents, Monte Carlo full-game simulations, accounts, backend services, analytics, external APIs, or expanded browser permissions require approval before implementation.
@@ -66,6 +98,8 @@ Major features such as live overlays, content scripts, AI opponents, Monte Carlo
 ## Current State
 
 Phase 1A has a Vite, React, and TypeScript website shell with quality gates, shared config, a support button placeholder, fair-play messaging, and reserved extension folders.
+
+Phase 1B has AGPL-3.0-only project licensing, NOTICE attribution, asset policy, asset inventory, and source-intake documentation pinned to a checked OpenFront source commit. The OpenFront source clone is local-only and ignored by Git.
 
 There are no implemented mechanics, planner formulas, scoring systems, saved scenarios, browser permissions, extension runtime behavior, content scripts, OpenFront integrations, backend services, analytics, or storage features.
 
@@ -109,7 +143,7 @@ Do not auto-commit or create tags without explicit approval.
 Version tag pattern:
 
 - `v0.1.0-phase-1a` for app shell
-- `v0.1.1-phase-1b` for core math foundation
+- `v0.1.1-phase-1b` for licensing and source intake
 - `v0.1.2-phase-1c` for visual sandbox grid
 - `v0.1.3-phase-1d` for analysis panel
 - `v0.1.4-phase-1e` for extension launcher

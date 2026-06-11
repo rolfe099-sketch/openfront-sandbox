@@ -1,0 +1,11 @@
+OpenFront Sandbox
+
+OpenFront Sandbox is an independent fair-play training sandbox for offline learning and scenario review. It does not interact with live OpenFront matches, automate gameplay, read hidden state, modify the OpenFront client, or provide live-match assistance.
+
+Portions of OpenFront Sandbox may later be derived from OpenFront source code or OpenFront open assets where legally and technically practical. Any copied or adapted source code or assets must be tracked in project documentation before release.
+
+OpenFront is © OpenFront and Contributors. OpenFront source code is licensed under the GNU Affero General Public License v3.0. OpenFront open assets under the upstream `/resources` directory are licensed under Creative Commons Attribution-ShareAlike 4.0 International unless otherwise indicated by upstream licensing files.
+
+OpenFront Sandbox is not affiliated with or endorsed by OpenFront Inc. or the OpenFront project unless otherwise stated.
+
+OpenFront Sandbox does not use proprietary OpenFront assets. Assets under OpenFront's upstream `/proprietary` directory, external/CDN/API/database-hosted assets, premium skins, premium models, premium textures, and unknown-license assets are forbidden unless explicit written permission is obtained and documented.

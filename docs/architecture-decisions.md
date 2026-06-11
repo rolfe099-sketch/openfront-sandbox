@@ -148,3 +148,103 @@ Phase 1A already has TypeScript for the app, so compiling the script avoids addi
 ### Tradeoffs
 
 The command has a small compile step and writes to `dist-scripts`, but avoids an extra runtime tool and keeps dependency scope tight.
+
+## 2026-06-11
+
+### Decision
+
+Use local ignored OpenFront source clone for inspection, not vendored source.
+
+### Options Considered
+
+- Vendor OpenFront source or assets into this repository.
+- Rely only on GitHub web browsing for source inspection.
+- Use `.external/openfront` as a local clone that is ignored by Git.
+
+### Reason
+
+The local ignored clone keeps this repository clean, avoids copying OpenFront code or assets before licensing decisions, allows commit-pinned source research, and supports source-faithful implementation later.
+
+### Tradeoffs
+
+Developers who perform source research need to clone OpenFront separately and record the checked commit. Normal build and test workflows remain independent of the external clone.
+
+## 2026-06-11
+
+### Decision
+
+Prefer source-faithful mechanics over placeholder formulas.
+
+### Options Considered
+
+- Add simple placeholder formulas whenever exact mechanics are unknown.
+- Allow placeholders only when explicitly approved as temporary educational assumptions.
+- Block mechanics implementation until source research locates and documents the relevant OpenFront behavior.
+
+### Reason
+
+The project goal is accurate OpenFront training. Fake mechanics would undermine trust, and unknown mechanics should block implementation until researched unless a temporary educational placeholder is explicitly approved.
+
+### Tradeoffs
+
+This slows early mechanics work, but it protects accuracy, public credibility, and fair-play compliance.
+
+## 2026-06-11
+
+### Decision
+
+License OpenFront Sandbox code under AGPL-3.0 for source-derived compatibility.
+
+### Options Considered
+
+- Keep OpenFront Sandbox without an explicit root license.
+- Use a permissive license and avoid source-derived OpenFront logic.
+- License OpenFront Sandbox code under AGPL-3.0-only.
+
+### Reason
+
+OpenFront source code is AGPL-3.0 in the checked upstream license materials, and OpenFront Sandbox aims to be source-faithful where legally and technically practical. AGPL-3.0-only keeps the project posture compatible with future approved reuse or adaptation of OpenFront public source code.
+
+### Tradeoffs
+
+AGPL licensing imposes stronger reciprocal obligations than a permissive license. That is appropriate for source-derived compatibility, but future contributors and distributors must understand the license obligations.
+
+## 2026-06-11
+
+### Decision
+
+Use OpenFront `resources` assets when useful and compliant; forbid `proprietary` and external assets.
+
+### Options Considered
+
+- Avoid all OpenFront assets.
+- Use any asset visible in the OpenFront repository or service.
+- Allow reviewed `resources` assets under CC BY-SA 4.0 and forbid proprietary, external, premium, and unknown-license assets.
+
+### Reason
+
+OpenFront open assets under `resources` may help source-faithful offline training when properly attributed and tracked. OpenFront proprietary assets and external assets are not covered by the open asset license and must not be used without explicit written permission.
+
+### Tradeoffs
+
+This allows useful open resources later, but requires a per-asset inventory, attribution handling, and ShareAlike review before import.
+
+## 2026-06-11
+
+### Decision
+
+Prefer source-derived mechanics over approximations.
+
+### Options Considered
+
+- Build OpenFront-inspired approximations from scratch.
+- Use temporary placeholder formulas broadly during early development.
+- Derive mechanics from OpenFront public source where approved and documented.
+
+### Reason
+
+The product goal is source-faithful OpenFront training rather than an approximation. Source-derived mechanics, with tracked paths and commit hashes, protect user trust and reduce the risk of inaccurate planner behavior.
+
+### Tradeoffs
+
+This requires more source research and compliance tracking before mechanics appear in the app, but it gives the project a much stronger accuracy foundation.

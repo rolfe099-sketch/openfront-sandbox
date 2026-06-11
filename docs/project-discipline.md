@@ -11,7 +11,7 @@ The long-term north star is to help players reason clearly about OpenFront-style
 - Check `CHANGELOG.md` before making updates.
 - Keep `CHANGELOG.md` live by adding a concise entry after meaningful project changes.
 - Use `CHANGELOG.md` as the fastest recovery point when context has compacted or a new session begins.
-- Check this document, `docs/architecture-decisions.md`, and `docs/openfront-mechanics-sources.md` when a change touches project rules, architecture, or OpenFront mechanics.
+- Check this document, `docs/architecture-decisions.md`, `docs/licensing-and-attribution.md`, `docs/openfront-asset-policy.md`, `docs/openfront-asset-inventory.md`, `docs/openfront-source-map.md`, and `docs/openfront-mechanics-sources.md` when a change touches project rules, architecture, licensing, source intake, assets, or OpenFront mechanics.
 
 ## Mechanics and Compliance Preflight
 
@@ -19,9 +19,13 @@ Before implementing mechanics or compliance-sensitive features, check:
 
 1. `CHANGELOG.md`
 2. `docs/project-discipline.md`
-3. `docs/openfront-mechanics-sources.md`
-4. `docs/upstream-status.json`
-5. The latest file in `docs/upstream-checks/`
+3. `docs/licensing-and-attribution.md`
+4. `docs/openfront-asset-policy.md`
+5. `docs/openfront-asset-inventory.md`
+6. `docs/openfront-source-map.md`
+7. `docs/openfront-mechanics-sources.md`
+8. `docs/upstream-status.json`
+9. The latest file in `docs/upstream-checks/`
 
 If `docs/upstream-status.json` has `"reviewRequired": true`, stop and ask before changing game-related or compliance-sensitive logic.
 
@@ -33,10 +37,16 @@ If `docs/upstream-status.json` has `"reviewRequired": true`, stop and ask before
 
 ## Source Tracking and Game Accuracy
 
+- OpenFront Sandbox is source-faithful by default.
+- Do not add invented mechanics, fake formulas, fake constants, fake maps, or arbitrary gameplay values unless they are explicitly approved as temporary educational placeholders.
+- If exact mechanics are complex, stop and perform source research instead of inventing a simplification.
+- Use direct OpenFront public source and open assets where legally allowed, technically useful, and explicitly approved for intake.
+- Never use OpenFront proprietary assets, external/CDN/API/database-hosted assets, premium assets, or unknown-license assets unless explicit written permission is obtained and documented.
+- Track every copied or adapted source file, source-derived implementation, and imported asset with upstream path, commit hash, license status, attribution, and review notes.
 - Do not guess silently when implementing OpenFront-related mechanics.
 - Document every game mechanic constant or rule with source and confidence level in code.
 - Update `docs/openfront-mechanics-sources.md` before implementing mechanics that claim to match OpenFront.
-- Label unverified formulas as training assumptions in both code and UI.
+- Temporary educational placeholders require explicit approval and must be labeled as training assumptions in both code and UI.
 - Define `optimal` as `optimal under stated assumptions`: the best recommendation for the visible inputs, documented assumptions, simplifications, and sourced formulas currently in use.
 - Do not imply guaranteed perfect play, hidden-state awareness, live-game automation, or exact OpenFront behavior unless the relevant mechanics are source-code verified and documented.
 
@@ -103,7 +113,7 @@ Do not auto-commit or create tags without explicit approval.
 Use this version pattern:
 
 - `v0.1.0-phase-1a` for app shell
-- `v0.1.1-phase-1b` for core math foundation
+- `v0.1.1-phase-1b` for licensing and source intake
 - `v0.1.2-phase-1c` for visual sandbox grid
 - `v0.1.3-phase-1d` for analysis panel
 - `v0.1.4-phase-1e` for extension launcher

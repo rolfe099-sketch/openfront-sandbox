@@ -1,6 +1,7 @@
 node_modules/
 dist/
 dist-scripts/
+.external/
 *.tsbuildinfo
 .vite/
 .DS_Store
