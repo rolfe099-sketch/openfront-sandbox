@@ -6,8 +6,8 @@ OpenFront Sandbox is not affiliated with or endorsed by OpenFront unless otherwi
 
 ## Status
 
-- Current phase: Phase 1B
-- Current focus: licensing, source intake, asset policy, and project foundation
+- Current phase: Phase 1C
+- Current focus: local OpenFront source inspection, source mapping, asset inventory, and project foundation
 - Playable mechanics: not implemented yet
 - Live match integration: not implemented and not planned without explicit review
 - Local app shell: available
@@ -21,7 +21,7 @@ Planned directions include:
 - Source-faithful offline strategy practice.
 - Scenario drills for common map, expansion, defense, and timing decisions.
 - Map and mechanics study based on reviewed OpenFront public source behavior.
-- Simulation and replay-style coaching tools in later phases.
+- Offline benchmark, simulation evaluation, and replay-style coaching tools in later phases.
 - Clear explanations of what is optimal under stated assumptions.
 
 ## Fair Play
@@ -84,6 +84,8 @@ Future source-derived mechanics must be tracked with upstream paths, commit hash
 
 When OpenFront Sandbox calls something `optimal`, it means `optimal under stated assumptions`: the best recommendation for the visible inputs, documented assumptions, simplifications, and sourced formulas currently in use. It does not mean guaranteed perfect play, hidden-state awareness, live-game automation, or exact OpenFront behavior unless the relevant mechanics are source-code verified and documented.
 
+Future benchmark, simulation evaluation, and replay-review architecture is tracked in `docs/benchmark-policy-engine.md`.
+
 ## License and Attribution
 
 OpenFront Sandbox code is licensed under AGPL-3.0-only. See `LICENSE`.
@@ -116,6 +118,13 @@ OpenFront Sandbox preserves OpenFront attribution in `NOTICE`. OpenFront is copy
 - Document source and asset intake policy.
 - Prepare for future source-derived mechanics without copying OpenFront code or assets yet.
 
+### Phase 1C: Source and Asset Inventory
+
+- Verify the local ignored OpenFront source clone.
+- Record the checked OpenFront branch and commit.
+- Map relevant source areas for future source-derived mechanics.
+- Expand the high-level asset inventory without copying OpenFront source or assets.
+
 ### Later Phases, Approval Required
 
 - Source-derived mechanic models.
@@ -134,6 +143,7 @@ Before changing mechanics, compliance-sensitive features, source intake, or asse
 
 Key project documents:
 
+- `AGENTS.md`
 - `CHANGELOG.md`
 - `docs/project-discipline.md`
 - `docs/licensing-and-attribution.md`
@@ -141,8 +151,11 @@ Key project documents:
 - `docs/openfront-asset-inventory.md`
 - `docs/openfront-source-map.md`
 - `docs/openfront-mechanics-sources.md`
+- `docs/benchmark-policy-engine.md`
 - `docs/upstream-watch.md`
 - `docs/upstream-status.json`
+
+AI/coding assistants should read `AGENTS.md` before making changes.
 
 The upstream watch process tracks OpenFront source, releases, terms, privacy policy, and local mechanics assumptions. It may detect and summarize changes, but it must not automatically update formulas, mechanics, fair-play policy, permissions, content scripts, planner behavior, or OpenFront integration behavior.
 
@@ -167,10 +180,11 @@ Version tag pattern:
 
 - `v0.1.0-phase-1a` for app shell.
 - `v0.1.1-phase-1b` for licensing and source intake.
-- `v0.1.2-phase-1c` for visual sandbox grid.
-- `v0.1.3-phase-1d` for analysis panel.
-- `v0.1.4-phase-1e` for extension launcher.
-- `v0.1.5-phase-1f` for GitHub Pages deployment.
+- `v0.1.2-phase-1c` for source and asset inventory.
+- `v0.1.3-phase-1d` for visual sandbox grid.
+- `v0.1.4-phase-1e` for analysis panel.
+- `v0.1.5-phase-1f` for extension launcher.
+- `v0.1.6-phase-1g` for GitHub Pages deployment.
 
 The upstream watch script is wired as:
 

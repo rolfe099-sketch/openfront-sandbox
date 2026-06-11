@@ -25,6 +25,9 @@ Before making project updates, read this file first. After making meaningful cha
 - Added an OpenFront asset policy and initial asset inventory for future compliant use of open `resources` assets.
 - Updated public docs to support compliance-first, source-derived architecture without copying OpenFront source or assets yet.
 - Added Phase 1C local OpenFront clone verification, source-area mapping, and expanded high-level asset inventory at a pinned upstream commit.
+- Added root `AGENTS.md` as the standing development contract for AI and coding assistants.
+- Updated the README contributor process to point coding assistants to `AGENTS.md` before making changes.
+- Added benchmark policy, support and coordination, simulation evaluation, and replay-review architecture boundaries for future offline coaching work.
 
 ### Notes
 
@@ -37,4 +40,5 @@ Before making project updates, read this file first. After making meaningful cha
 - Future mechanics work is source-faithful by default; temporary educational placeholders require explicit approval and visible labeling.
 - Future source and asset intake must track upstream paths, commit hashes, license status, attribution, and review notes before release.
 - Phase 1C intentionally does not implement mechanics, formulas, scoring, map data, canvas UI, extension behavior, permissions, content scripts, OpenFront integration, backend services, storage, analytics, copied OpenFront source, or copied OpenFront assets.
+- Benchmark policy, support and coordination actions, simulation evaluation, and replay-style review are not implemented and must remain offline or post-game only.
 - No commits or tags should be created automatically; both require explicit approval.

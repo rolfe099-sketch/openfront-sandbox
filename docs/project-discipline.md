@@ -50,6 +50,14 @@ If `docs/upstream-status.json` has `"reviewRequired": true`, stop and ask before
 - Define `optimal` as `optimal under stated assumptions`: the best recommendation for the visible inputs, documented assumptions, simplifications, and sourced formulas currently in use.
 - Do not imply guaranteed perfect play, hidden-state awareness, live-game automation, or exact OpenFront behavior unless the relevant mechanics are source-code verified and documented.
 
+## Benchmark and Replay Direction
+
+- Future benchmark policy, support, transfer, coordination, simulation evaluation, and replay-review features must remain offline or post-game learning tools.
+- Support and coordination actions are sandbox action categories only; they must not become live-player coordination tools or real-time match advice.
+- Replay-style review may use only user-provided or officially supported post-game data.
+- Do not add live recommendations, live overlays, hidden-state reading, packet or WebSocket inspection, automation, content scripts, or OpenFront page integration without explicit approval and fair-play review.
+- Document future benchmark and replay architecture in `docs/benchmark-policy-engine.md`.
+
 ## Fair Play
 
 - Review current OpenFront rules, terms, and source-code expectations before adding features that interact with OpenFront itself.
@@ -114,10 +122,11 @@ Use this version pattern:
 
 - `v0.1.0-phase-1a` for app shell
 - `v0.1.1-phase-1b` for licensing and source intake
-- `v0.1.2-phase-1c` for visual sandbox grid
-- `v0.1.3-phase-1d` for analysis panel
-- `v0.1.4-phase-1e` for extension launcher
-- `v0.1.5-phase-1f` for GitHub Pages deployment
+- `v0.1.2-phase-1c` for source and asset inventory
+- `v0.1.3-phase-1d` for visual sandbox grid
+- `v0.1.4-phase-1e` for analysis panel
+- `v0.1.5-phase-1f` for extension launcher
+- `v0.1.6-phase-1g` for GitHub Pages deployment
 
 A future `npm run checkpoint` helper may be added only if it does not commit or tag automatically. It should only run quality gates, print git status, remind the user to update the changelog, and suggest the next tag.
 

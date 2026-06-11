@@ -248,3 +248,23 @@ The product goal is source-faithful OpenFront training rather than an approximat
 ### Tradeoffs
 
 This requires more source research and compliance tracking before mechanics appear in the app, but it gives the project a much stronger accuracy foundation.
+
+## 2026-06-11
+
+### Decision
+
+Keep benchmark policy, support and coordination actions, simulation evaluation, and replay review offline or post-game only.
+
+### Options Considered
+
+- Add live recommendations, automation, overlays, or OpenFront page integration.
+- Avoid benchmark and replay architecture entirely.
+- Define a strict offline and post-game architecture before implementation.
+
+### Reason
+
+OpenFront Sandbox should help players learn source-faithful decision quality without interacting with live matches. A documented offline boundary allows future benchmark, support, simulation, and replay-review features to be designed for training while avoiding cheat-adjacent behavior.
+
+### Tradeoffs
+
+This limits real-time convenience and requires user-provided or officially supported post-game data for replay-style review. It protects fair-play compliance, project credibility, and the distinction between training tools and live-match assistance.
